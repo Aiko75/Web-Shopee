@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="sign_up.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body>
+  <div class="container"> <!-- Khối chứa toàn bộ form đăng ký -->
+    <!-- Tiêu đề của trang đăng ký -->
+    <div class="title">
+      <img src="../Resources/Favicon.ico" alt="Site Logo" class="logo">
+      <h2>Sign Up</h2>
+    </div>
+    <!-- Khối chứa các biểu tượng mạng xã hội -->
+    <div class="social-icons"> <!-- Khối chứa các biểu tượng mạng xã hội -->
+      <i class="fab fa-facebook-f"></i> <!-- Icon Facebook -->
+      <i class="fab fa-google"></i> <!-- Icon Google -->
+    </div>
+    <p>or:</p> <!-- Chú thích "hoặc" để phân biệt giữa cách đăng nhập bằng mạng xã hội và nhập thông tin -->
+    <!-- Các ô nhập liệu thông tin người dùng -->
+    <input type="text" placeholder="Name"> <!-- Trường nhập họ tên -->
+    <input type="text" placeholder="Username"> <!-- Trường nhập tên tài khoản -->
+    <input type="email" placeholder="Email"> <!-- Trường nhập địa chỉ email -->
+    <input type="password" placeholder="Password"> <!-- Trường nhập mật khẩu -->
+    <input type="password" placeholder="Confirm Password"> <!-- Trường nhập xác nhận mật khẩu -->
+
+    <div class="checkbox-group"> <!-- Nhóm checkbox để đồng ý điều khoản -->
+      <input type="checkbox" id="agree"> <!-- Checkbox đồng ý điều khoản -->
+      <label for="agree">
+        I agree to the
+        <a href="terms_and_condition.html" target="_blank">terms and conditions</a><!-- Nhãn thông báo về điều khoản -->
+      </label> 
+    </div>
+
+    <div class="links"> <!-- Phần chứa các liên kết phụ -->
+      <a href="log_in.html">Already have an account? Log in</a> <!-- Liên kết quay lại trang đăng nhập nếu đã có tài khoản -->
+    </div>
+
+    <button class="btn">Sign Up</button> <!-- Nút đăng ký -->
+  </div>
+  <script src="sign_up.js"></script>
+</body>
+</html>

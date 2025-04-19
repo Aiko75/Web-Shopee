@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Forgot Password Flow</title>
+  <link rel="stylesheet" href="forgetpw.css">
+  <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body>
+  <div class="container"> <!-- Phần chứa toàn bộ nội dung của trang -->
+    <!-- Step 1: Nhập email -->
+    <div id="step1" class="step"> <!-- Bước 1: Nhập email -->
+      <div class="circle">1</div> 
+      <h3>Forget Password Form</h3> <!-- Tiêu đề của bước 1 -->
+      <p>Please enter your username or email address. You will receive a link to create a new password via email.</p> <!-- Hướng dẫn người dùng nhập email -->
+      <form id="formstep1"> <!-- Form để người dùng nhập email -->
+        <input type="email" id="email" placeholder="Enter your email" required /> <!-- Trường nhập email -->
+        <button id="btnget" type="submit">Send link reset</button> <!-- Nút gửi yêu cầu reset mật khẩu -->
+      </form>
+    </div>
+
+    <!-- Step 2: Đang xử lý -->
+    <div id="step2" class="step hidden"> <!-- Bước 2: Xác minh OTP (Hiển thị sau khi gửi OTP) -->
+      <div class="circle">2</div> <!-- Số thứ tự của bước -->
+      <h3>OTP Verification</h3> <!-- Tiêu đề của bước 2 -->
+      <!-- Thông báo gửi OTP -->
+      <p id="sendmessage" class="message hidden">OTP has been sent to your email.</p> <!-- Thông báo gửi OTP thành công -->
+      <!-- Đếm ngược -->
+      <p id="countdown" class="message hidden">You can resend code in <span id="timer">60</span>s</p> <!-- Thông báo đếm ngược cho OTP -->
+      <form id="formstep2"> <!-- Form nhập mã OTP -->
+        <input type="text" id="otp" placeholder="Enter OTP code" required disabled /> <!-- Trường nhập mã OTP -->
+        <button id="btnverifyotp" type="submit" disabled>Verify</button> <!-- Nút xác minh OTP -->
+      </form>
+    </div>
+
+    <!-- Step 3: Reset password -->
+    <div id="step3" class="step hidden"> <!-- Bước 3: Đặt lại mật khẩu -->
+      <div class="circle">3</div> <!-- Số thứ tự của bước -->
+      <h3>Reset Password Form</h3> <!-- Tiêu đề của bước 3 -->
+      <form id="formstep3"> <!-- Form để người dùng nhập mật khẩu mới -->
+        <p>Enter your new password below.</p> <!-- Hướng dẫn nhập mật khẩu mới -->
+        <input type="password" id="password" placeholder="New Password *" required /> <!-- Trường nhập mật khẩu mới -->
+        <input type="password" id="confirmpassword" placeholder="New Password (Confirmation) *" required /> <!-- Trường xác nhận mật khẩu mới -->
+        <button id="btnreset" type="submit">Reset Password</button> <!-- Nút xác nhận và đặt lại mật khẩu -->
+      </form>
+    </div>
+  </div>
+  <script src="forgetpw.js"></script>
+</body>
+</html>
