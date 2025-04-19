@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+
+
 * {
     padding: 0;
     margin: 0;
@@ -32,8 +36,55 @@ body::before {
 }
 
 .mainfoot {
+    position: relative;
     height: 250px;
     background-image: url("../Resources/footer.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
+}
+#footerlogo {
+    width: 40%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+.footertext{
+    font-family: "Noto San", sans-serif;
+    color: #F7F2CA;
+    position: absolute;
+    top: 50%;
+    right: 13.5%;
+    transform: translateY(-50%);
+    z-index: 2;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: x-large;
+    letter-spacing: 1px;
+}
+.footertextmini{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px;
+}
+.footertextmini li{
+    margin-top: -10px;
+    display: inline;
+}
+#fb {
+    width: 60px;
+    height: 60px;
+}
+#insta {
+    width: 66px;
+    height: 66px;
+}
+#x {
+    width: 64px;
+    height: 64px;
 }
