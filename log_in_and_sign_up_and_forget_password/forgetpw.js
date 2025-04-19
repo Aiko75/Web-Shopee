@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     step1.classList.add('hidden');                                 // ẩn bước 1
     step2.classList.remove('hidden');                              // hiện bước 2
 
-    await delay(5000);                                             // giả lập gửi otp trong 5 giây
+    await delay(2000);                                             // giả lập gửi otp trong 5 giây
 
     sendmessage.classList.remove('hidden');                        // hiển thị thông báo đã gửi otp
 
