@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootleg</title>
+    
+    <link href="homenav.css" rel="stylesheet">
+    <link href="homebody.css" rel="stylesheet">
+    <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+
+    <script src="home.js" defer></script>
+    <link rel="stylesheet" href="navbarMenClo.css">
+</head>
+
+
+
+<body>
+    <ul class="navbar">
+        <li><a href="home.html"> <img id="logo" src="../Resources/logo placeholder.png"> </a></li>
+
+        <li id="searchbar">
+            <form id="searchform">
+            <input type="text" placeholder="Search...">
+            <button type="submit"><img id="searchIMG" src="../Resources/search.png"></button>
+            </form>
+        </li>
+
+        <li><a href="#"> <img id="cartIMG" src="../Resources/cart.png"> </a></li>
+
+        <li><a href="#"> <img id="menuIMG" src="../Resources/menu.png"> </a>
+            <ul class="navdrop">
+                <li><br></li>
+                    <li><a href="#"> Option 1 </a></li>
+                    <li><a href="#"> Option 2 </a></li>
+                    <li><a href="#"> Option 3 </a></li>
+                <li><br></li>
+            </ul>
+        </li>
+        
+        <li><a href="#"> <img id="loginIMG" src="../Resources/user.png"> </a></li>
+    </ul>
+
+      <div class="main-wrapper">
+        <div  class="left-container">
+          <h2>Category</h2><br>
+          <div class="Sort-Container">
+            <h3>Sort</h3>
+              <select class="SortBtn" onchange="handleSortChange(this.value)">
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+                <option value="name-asc">A - Z</option>
+                <option value="name-desc">Z - A</option>
+                <option value="rating-desc">Rating: High → Low</option>
+                <option value="rating-asc">Rating: Low → High</option>
+              </select>
+          </div>
+
+          <!-- <div class="Sort-Container">
+            <div class="slider-container">
+              <h3>Price Slider</h3>
+                <div class="slider-size">
+                  <p>0</p>
+                  <input type="range" id="priceSlider" min="0" max="1000" step="1" value="1000">
+                  <p>1000</p>
+                  <button onclick="sortBySlider()">Confirm</button>
+                </div>
+            </div> 
+          </div> -->
+
+          <div class="Sort-Container">
+            <h3>Price Filter</h3>
+            <input type="number" min="0" id="minValue"  placeholder="0">
+            to
+            <input type="number" max="1000" min="0" id="maxValue" placeholder="1000"> $
+            <button class="filterBTN" onclick="applyAllFilters()">Confirm</button>
+          </div>
+
+          <div class="Sort-Container">
+            <div class="category-filter">
+              <h3>Category</h3>
+              <label><input type="checkbox" class="category-checkbox" value="men's clothing" checked> Men's Clothing</label><br>
+              <label><input type="checkbox" class="category-checkbox" value="women's clothing"> Women's Clothing</label><br>
+              <label><input type="checkbox" class="category-checkbox" value="jewelery"> Jewelery</label><br>
+              <label><input type="checkbox" class="category-checkbox" value="electronics"> Electronics</label><br>
+            </div>
+          </div>
+          
+          <div class="Sort-Container"></div>
+        </div>
+          <div class="container">
+            <h1 style="color: black;">Men's Clothing</h1>
+            <div class="product-flex">
+              <div class="product-card">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <footer class="mainfoot">
+        <div>
+            
+        </div>
+    </footer>
+    <script src="navbarMenClo.js"></script>
+</body>
+</html>
+
