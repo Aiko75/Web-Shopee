@@ -16,7 +16,7 @@
       <li id="searchbar">
         <form id="searchform"><input type="text" placeholder="Search..."><button type="submit"><img id="searchIMG" src="../Resources/search.png" alt="Search"></button></form>
       </li>
-      <li><a href="#"><img id="cartIMG" src="../Resources/cart.png" alt="Cart"></a></li> 
+      <li><a href="cart.html"><img id="cartIMG" src="../Resources/cart.png" alt="Cart"></a></li> 
       <li><a href="#"><img id="menuIMG" src="../Resources/menu.png" alt="Menu"></a>
         <ul class="navdrop">
           <li><a href="#">Option 1</a></li> 
@@ -24,7 +24,7 @@
           <li><a href="#">Option 3</a></li> 
         </ul>
       </li>
-      <li><a href="#"><img id="loginIMG" src="../Resources/user.png" alt="User"></a></li>                           
+      <li><a href="log_in.html"><img id="loginIMG" src="../Resources/user.png" alt="User"></a></li>                           
     </ul>
   </header>
 
@@ -45,7 +45,10 @@
       <button id="openVoucherBtn" class="btn voucher-btn">Select Voucher</button>                                      <!-- Chọn voucher -->
       <div id="voucherInfo" class="voucher-selected hidden"></div>                                                     <!-- Thông tin voucher -->
       <p>Total (<span id="totalQty">0</span> items): <strong>$<span id="totalPrice">0.00</span></strong></p>           <!-- Tổng số lượng và giá -->
-      <button id="checkoutBtn" class="btn checkout">Checkout</button>                                                  <!-- Nút thanh toán -->
+      <label for="shippingAddress">Shipping Address:</label><br>
+      <textarea id="shippingAddress" class="address-input" placeholder="Enter your shipping address" required></textarea>
+      <button id="checkoutBtn" class="btn checkout">Checkout</button>
+                                                
     </div>
   </aside>
 
@@ -61,3 +64,4 @@
 
   <script src="cart.js" defer></script>
 </html>
+
