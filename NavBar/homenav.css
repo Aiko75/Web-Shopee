@@ -1,0 +1,146 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: linear-gradient(#FF4D03, #F37103);
+    list-style: none;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    overflow: hidden;
+    padding-right: 60px;
+}
+.navbar li {
+    display: inline-block;
+    position: relative;
+}
+.navbar li a {
+    display: block;
+    padding: 15px 10px;
+    font-size: large;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+.navbar li ul.navdrop li {
+    display: block;
+    background: #3F4652;
+    width: 20%;
+}
+.navbar li ul.navdrop {
+    width: 80vw;
+    background: transparent;
+    position: fixed;
+    z-index: 999;
+    top: 6vh;
+    left: 79.42%;
+    padding: 0;
+        /*animation*/
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    overflow: hidden;
+} 
+.navbar li ul a {
+    font-size: medium;
+}
+.navbar li ul a:hover {
+    background: #171a1e;
+    transition: background-color 0.2s ease;
+    position: relative; /* Ensure positioning for ::after */
+}
+.navbar li ul a:hover::after {
+    content: '';
+    position: absolute;
+    top: 14.5%;
+    left: 6px;
+    width: 2px; /* Adjust width for the vertical line */
+    height: 70%;
+    text-align: center;
+    background: white;
+}
+.navbar li ul a:hover {
+    background: #171a1e;
+    transition: background-color 0.2s ease;
+}
+.navbar li:hover ul.navdrop {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.navbar li a:hover {
+    background: #3F4652;
+}
+.navbar li:first-child a:hover {
+    background: none;
+    transition: none;
+}
+
+
+
+#searchbar {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+#searchform {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 460px;
+    width: 100%;
+}
+#searchform input {
+    flex: 1;
+    height: 30px;
+    border: none;
+    padding: 0px 14px;
+    outline: none;
+    font-size: 14px;
+}
+#searchform button {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+
+
+#logo {
+    height: 30px;
+    user-select: none;
+}
+#searchIMG{
+    width: 16px;
+    height: 16px;
+}
+#cartIMG {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    max-height: 100%;
+    margin:17px;
+}
+#menuIMG {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    max-height: 100%;
+    margin: 17px;
+}
+#loginIMG {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    max-height: 100%;
+    margin: 17px;;   
+}
