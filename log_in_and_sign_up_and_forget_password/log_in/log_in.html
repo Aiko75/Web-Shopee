@@ -1,0 +1,45 @@
+<!-- log_in.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOG IN</title>
+  <link rel="stylesheet" href="log_in.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body> 
+  <div class="container"> <!-- Khối chứa toàn bộ form đăng nhập -->
+   <!-- Tiêu đề của trang đăng nhập -->
+    <div class="title">
+      <img src="../../Resources/Favicon.ico" alt="Site Logo" class="logo">
+      <h2>LOG IN</h2>
+    </div>
+    <div class="social-icons"> <!-- Khối chứa các biểu tượng mạng xã hội -->
+      <i class="fab fa-facebook-f"></i> <!-- Icon Facebook -->
+      <i class="fab fa-google"></i> <!-- Icon Google -->
+    </div>
+    <p>hoặc:</p> <!-- Chú thích "hoặc" để phân biệt giữa cách đăng nhập bằng mạng xã hội và nhập thông tin -->
+    <!--  thêm thẻ <form> với id="login-form" -->
+    <form id="login-form"> <!-- Thẻ form với id="login-form" để JS có thể truy cập và xử lý -->
+      <!-- Thêm id và name cho input để JS có thể truy cập -->
+      <input type="text" id="email" name="email" placeholder="Email or username" required> <!-- Trường nhập email hoặc tên người dùng, yêu cầu bắt buộc -->
+      <input type="password" id="password" name="password" placeholder="Password"> <!-- Trường nhập mật khẩu -->
+      <div class="checkbox-group"> <!-- Nhóm checkbox để người dùng chọn "Remember me" -->
+        <input type="checkbox" id="remember"> <!-- Checkbox để ghi nhớ tài khoản -->
+        <label for="remember">Remember me</label> <!-- Nhãn thông báo cho checkbox -->
+      </div>
+      <div id="error-message" class="error-message"></div> <!-- Hiển thị thông báo lỗi nếu có -->
+      <div class="links"> <!-- Liên kết phụ -->
+        <a href="../forgetpw/forgetpw.html" id="forgot">Forgot password</a> <!-- Liên kết tới trang quên mật khẩu -->
+        <a href="../sign_up/sign_up.html">Sign up</a> <!-- Liên kết tới trang đăng ký -->
+      </div>
+      <!-- Nút submit -->
+      <button type="submit" class="btn">Log in</button> <!-- Nút đăng nhập, gửi dữ liệu form -->
+    </form>
+  </div>
+</body>
+  <script src="log_in.js"></script>
+</body>
+</html>
