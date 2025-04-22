@@ -1,168 +1,237 @@
-// === Cấu hình voucher === 
-const vouchers = [                                              // Danh sách mã giảm giá và mức giảm
-  { code: 'DISCOUNT10', discount: 0.10 },                       // Giảm 10%
-  { code: 'DISCOUNT20', discount: 0.20 },                       // Giảm 20%
-  { code: 'FREESHIP',  discount: 0.05 },                        // Giảm 5% (ví dụ freeship)
-  { code: 'DISCOUNT 25', discount: 0.25 },                      // Giảm 25%
-  { code: 'DISCOUNT 30', discount: 0.30 }                       // Giảm 30%
+
+const vouchers = [  
+  { code: 'DISCOUNT10', discount: 0.10 },  // Mã DISCOUNT10 giảm 10%
+  { code: 'DISCOUNT20', discount: 0.20 },  // Mã DISCOUNT20 giảm 20%
+  { code: 'FREESHIP',  discount: 0.05 },   // Mã FREESHIP giảm 5% (ví dụ freeship)
+  { code: 'DISCOUNT25', discount: 0.25 },  // Mã DISCOUNT25 giảm 25%
+  { code: 'DISCOUNT30', discount: 0.30 }   // Mã DISCOUNT30 giảm 30%
 ];
 
-let cart = [];                                                  // Mảng lưu thông tin sản phẩm trong giỏ
-let selectedVoucher = null;                                     // Mã giảm giá đang được chọn
-const CART_KEY = 'cart';                                        // Khóa để lưu vào localStorage
+let cart = [];                    // Mảng lưu thông tin sản phẩm trong giỏ (chỉ id và qty)
+let selectedVoucher = null;       // Voucher đang được chọn (null nếu chưa chọn)
+const CART_KEY = 'cart';          // Khóa dùng để lưu giỏ hàng vào localStorage
 
-function saveCart() {                                           // Lưu giỏ hàng vào localStorage
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));         // Chuyển mảng cart thành chuỗi
+// Lưu giỏ hàng vào localStorage (chỉ lưu id và qty)
+function saveCart() {
+  localStorage.setItem(
+    CART_KEY,
+    JSON.stringify(cart.map(({ id, qty }) => ({ id, qty })))  // Chuyển mảng cart thành chuỗi JSON chỉ gồm id và qty
+  );
 }
 
-document.addEventListener('DOMContentLoaded', initCartUI);      // Khi trang tải xong thì khởi tạo UI
+// --- Hàm fetch và merge dữ liệu sản phẩm trước khi render giỏ hàng ---
+async function loadCartAndRender() {
+  const products = await fetch('https://fakestoreapi.com/products') // Gọi API lấy tất cả sản phẩm
+    .then(res => res.json());                                        // Chuyển response thành JSON array
 
-function initCartUI() {
-  const buyNowBtn      = document.getElementById('buyNowBtn');      // Nút mua thêm
-  const checkoutBtn    = document.getElementById('checkoutBtn');    // Nút thanh toán
-  const openVoucherBtn = document.getElementById('openVoucherBtn'); // Nút mở modal mã giảm giá
-  const voucherModal   = document.getElementById('voucherModal');   // Modal chọn mã giảm giá
-  const modalBackdrop  = document.getElementById('modalBackdrop');  // Nền mờ đằng sau modal
-  const closeVoucherBtn  = document.getElementById('closeVoucherBtn');  // Nút đóng modal
-  const cancelVoucherBtn = document.getElementById('cancelVoucherBtn'); // Nút hủy
-  const applyVoucherBtn  = document.getElementById('applyVoucherBtn');  // Nút áp dụng mã
-
-  cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];         // Lấy dữ liệu giỏ từ localStorage
-
-  buyNowBtn.addEventListener('click', () => {                      // Nếu bấm "Buy Now"
-    window.location.href = 'home.html';                            // Chuyển về trang mua hàng
+  const rawCart = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); // Lấy mảng cart từ localStorage hoặc mảng rỗng
+  cart = rawCart.map(ci => {                                          // Ghép dữ liệu product vào mỗi item trong cart
+    const prod = products.find(p => p.id === ci.id) || {};            // Tìm thông tin chi tiết theo id
+    return { ...prod, qty: ci.qty };                                  // Trả về object chứa tất cả thuộc tính của prod + qty
   });
 
-  checkoutBtn.addEventListener('click', () => {                    // Khi người dùng bấm thanh toán
-    if (cart.length === 0) {
-      window.location.href = 'home.html';                          // Nếu giỏ trống → chuyển về trang chính
+  renderCart();                                                       // Gọi hàm render giỏ hàng ra UI
+}
+
+document.addEventListener('DOMContentLoaded', () => { // Khi DOM đã tải xong
+  initCartUI();           // Khởi tạo các sự kiện cho UI
+  loadCartAndRender();    // Tải và hiển thị giỏ hàng
+});
+
+function initCartUI() {
+  const buyNowBtn      = document.getElementById('buyNowBtn');      // Nút "Buy More"
+  const checkoutBtn    = document.getElementById('checkoutBtn');    // Nút "Checkout"
+  const openVoucherBtn = document.getElementById('openVoucherBtn'); // Nút mở modal voucher
+  const voucherModal   = document.getElementById('voucherModal');   // Element modal voucher
+  const modalBackdrop  = document.getElementById('modalBackdrop');  // Nền mờ modal
+  const closeVoucherBtn  = document.getElementById('closeVoucherBtn');   // Nút đóng modal
+  const cancelVoucherBtn = document.getElementById('cancelVoucherBtn');  // Nút hủy chọn voucher
+  const applyVoucherBtn  = document.getElementById('applyVoucherBtn');   // Nút áp dụng voucher
+
+  // Khi bấm "Buy More", xóa giỏ cũ rồi quay về trang home
+  buyNowBtn.addEventListener('click', () => {
+    cart = [];          // Reset mảng cart
+    saveCart();         // Lưu lại vào localStorage
+    window.location.href = 'home.html';  // Điều hướng về home
+  });
+
+  // Xử lý khi bấm "Checkout"
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) {                   // Nếu giỏ hàng đang rỗng
+      window.location.href = 'home.html';      // Quay về trang home
+      return;
+    }
+    const addressInput = document.getElementById('shippingAddress');  // Lấy input địa chỉ
+    const address = addressInput.value.trim();                       // Lấy value và bỏ khoảng trắng
+    if (!address) {                                                  // Nếu địa chỉ trống
+      alert('Please enter a shipping address.');                     // Yêu cầu nhập địa chỉ
       return;
     }
 
-    const addressInput = document.getElementById('shippingAddress'); // Lấy input địa chỉ giao hàng
-    const address = addressInput.value.trim();                     // Bỏ khoảng trắng 2 đầu
-    if (!address) {
-      alert('Please enter a shipping address.');                   // Thông báo nếu thiếu địa chỉ
-      return;
-    }
-
-    const itemList = cart                                          // Tạo danh sách sản phẩm trong giỏ
+    // Tạo chuỗi mô tả từng item: "Title xQty ($price)"
+    const itemList = cart
       .map(i => `${i.title} x${i.qty} ($${(i.price * i.qty).toFixed(2)})`)
       .join('\n');
 
-    const rawTotal = cart.reduce((sum, i) => sum + i.qty * i.price, 0); // Tổng chưa giảm giá
-    const finalTotal = selectedVoucher                              // Áp dụng mã giảm nếu có
-      ? (rawTotal * (1 - selectedVoucher.discount)).toFixed(2)
-      : rawTotal.toFixed(2);
+    const rawTotal = cart.reduce((sum, i) => sum + i.qty * i.price, 0);  // Tính tổng trước giảm giá
+    const finalTotal = selectedVoucher                                   
+      ? (rawTotal * (1 - selectedVoucher.discount)).toFixed(2)            // Nếu có voucher, áp dụng giảm
+      : rawTotal.toFixed(2);                                              // Nếu không có voucher
 
-    alert(                                                           // Thông báo thành công
+    // Hiển thị alert tổng kết đơn hàng
+    alert(
       `🎉 Payment Successful! 🎉\n\n` +
       `Order Details:\n${itemList}\n\n` +
       `Total Paid: $${finalTotal}\n` +
       `Shipping to: ${address}`
     );
 
-    cart = [];                                                       // Reset giỏ hàng
-    saveCart();                                                      // Lưu lại giỏ hàng trống
-    selectedVoucher = null;                                          // Xóa mã giảm giá
-    document.getElementById('voucherInfo').classList.add('hidden');  // Ẩn thông tin mã giảm giá
-    addressInput.value = '';                                         // Xóa địa chỉ
-    renderCart();                                                    // Vẽ lại giỏ hàng
+    // Sau khi thanh toán xong: reset giỏ hàng và voucher, cập nhật UI
+    cart = [];
+    saveCart();
+    selectedVoucher = null;
+    document.getElementById('voucherInfo').classList.add('hidden');
+    addressInput.value = '';
+    renderCart();  // Cập nhật lại giao diện giỏ hàng
   });
 
-  openVoucherBtn.addEventListener('click', () => {              // Khi mở chọn mã giảm giá
-    voucherModal.classList.remove('hidden');                    // Hiện modal
-    renderVouchers();                                           // Hiện danh sách mã
+  // Mở modal chọn voucher
+  openVoucherBtn.addEventListener('click', () => {
+    voucherModal.classList.remove('hidden');  // Hiện modal
+    renderVouchers();                         // Vẽ danh sách voucher ra modal
   });
 
+  // Đóng modal khi click nền mờ hoặc nút close/cancel
   [modalBackdrop, closeVoucherBtn, cancelVoucherBtn].forEach(el =>
-    el.addEventListener('click', () => voucherModal.classList.add('hidden')) // Đóng modal khi click ra ngoài
+    el.addEventListener('click', () => voucherModal.classList.add('hidden'))
   );
 
-  applyVoucherBtn.addEventListener('click', () => {             // Khi bấm nút áp dụng mã
-    const sel = document.querySelector('input[name=voucher]:checked'); // Tìm mã được chọn
-    if (!sel) return;
-    selectedVoucher = vouchers[parseInt(sel.value, 10)];        // Lấy thông tin mã từ mảng
-    voucherModal.classList.add('hidden');                       // Ẩn modal
-    updateSummary();                                            // Cập nhật tổng tiền
-    saveCart();                                                 // Lưu lại
+  // Áp dụng voucher đã chọn
+  applyVoucherBtn.addEventListener('click', () => {
+    const sel = document.querySelector('input[name=voucher]:checked'); // Lấy radio đã chọn
+    if (!sel) return;                                                // Nếu chưa chọn thì thôi
+    selectedVoucher = vouchers[parseInt(sel.value, 10)];             // Gán voucher tương ứng
+    voucherModal.classList.add('hidden');                            // Ẩn modal
+    updateSummary();                                                 // Cập nhật tổng tiền
+    saveCart();                                                      // Lưu giỏ hàng (có thể lưu voucher nữa nếu muốn)
   });
 
-  renderCart();                                                 // Hiện giỏ hàng ban đầu
+  // Nếu có nút Add to Cart trên trang chi tiết sản phẩm
+  const addToCartBtn = document.getElementById('addToCartBtn');
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', () => {
+      const id  = parseInt(addToCartBtn.dataset.id, 10);             // Lấy id từ data-id
+      const qty = parseInt(addToCartBtn.dataset.qty || '1', 10);     // Lấy qty từ data-qty
+      const exist = cart.find(i => i.id === id);                     // Kiểm tra đã có trong cart chưa
+      if (exist) exist.qty += qty;                                   // Nếu có thì tăng qty
+      else cart.push({ id, qty });                                   // Nếu chưa thì thêm mới
+      saveCart();                                                    // Lưu lại
+      window.location.href = 'home.html';                            // Quay về home
+    });
+  }
 }
 
+// Vẽ giao diện giỏ hàng
 function renderCart() {
-  const cartItemsEl = document.getElementById('cartItems');     // Element chứa danh sách sản phẩm
-  cartItemsEl.innerHTML = '';                                   // Xóa nội dung cũ
+  const cartItemsEl = document.getElementById('cartItems');  // Container chứa item
+  cartItemsEl.innerHTML = '';                                // Xóa nội dung cũ
 
+  // Nếu giỏ trống: hiển thị trang empty, ẩn trang cart
   if (cart.length === 0) {
-    document.getElementById('emptyCartPage').classList.remove('hidden'); // Nếu trống thì hiển thị giao diện trống
-    document.getElementById('cartPage').classList.add('hidden');         // Ẩn phần chi tiết giỏ
+    document.getElementById('emptyCartPage').classList.remove('hidden');
+    document.getElementById('cartPage').classList.add('hidden');
     return;
   }
 
+  // Ngược lại: hiển thị trang cart, ẩn empty
   document.getElementById('emptyCartPage').classList.add('hidden');
   document.getElementById('cartPage').classList.remove('hidden');
 
+  // Với mỗi item trong cart, tạo 1 row
   cart.forEach(item => {
-    const row = document.createElement('div');                  // Tạo dòng hiển thị
+    const row = document.createElement('div');
     row.className = 'cart-item';
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.marginBottom = '10px';
+
     row.innerHTML = `
-      <div>${item.title}</div>
-      <div>
-        <input type="number" min="1" value="${item.qty}" data-id="${item.id}"> x $${item.price.toFixed(2)}
+      <img
+        src="${item.image}"   
+        alt="${item.title}"    
+        width="60"             
+        style="object-fit:cover; border:1px solid #ddd; border-radius:4px; margin-right:10px;"
+      />
+      <div style="flex:1;">
+        <div style="font-weight:600;">${item.title}</div>
+        <div>
+          <input
+            type="number"
+            min="1"
+            value="${item.qty}"
+            data-id="${item.id}"
+            style="width:50px; margin-right:5px;"
+          />
+          × $${item.price.toFixed(2)} = $${(item.qty * item.price).toFixed(2)}
+        </div>
       </div>
       <button class="btn" data-remove="${item.id}">Remove</button>
     `;
 
-    row.querySelector('input').addEventListener('change', e => { // Xử lý khi thay đổi số lượng
+    // Xử lý thay đổi số lượng
+    row.querySelector('input').addEventListener('change', e => {
       const val = parseInt(e.target.value, 10);
-      if (val < 1) return;
-      item.qty = val;
-      updateSummary();                                           // Cập nhật tổng tiền
-      saveCart();                                                // Lưu lại
+      if (val < 1) return;           // Không cho < 1
+      item.qty = val;                // Cập nhật qty
+      updateSummary();               // Cập nhật tổng tiền
+      saveCart();                    // Lưu lại
     });
 
-    row.querySelector('[data-remove]').addEventListener('click', () => { // Xử lý khi bấm "Remove"
-      cart = cart.filter(ci => ci.id !== item.id);
-      saveCart();
-      renderCart();                                              // render lại
+    // Xử lý xóa item
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      cart = cart.filter(ci => ci.id !== item.id);  // Lọc bỏ item đó
+      saveCart();                                    // Lưu lại
+      renderCart();                                  // Render lại UI
     });
 
-    cartItemsEl.appendChild(row);                                // Thêm dòng vào giao diện
+    cartItemsEl.appendChild(row);  // Thêm row vào container
   });
 
-  updateSummary();                                               // Cập nhật tổng tiền
+  updateSummary();  // Cập nhật tổng số lượng và tổng giá
 }
 
+// Cập nhật phần tóm tắt (summary) giỏ hàng
 function updateSummary() {
-  const totalQty    = cart.reduce((sum, i) => sum + i.qty, 0);   // Tổng số lượng
-  let total         = cart.reduce((sum, i) => sum + i.qty * i.price, 0); // Tổng tiền
-  const voucherInfo = document.getElementById('voucherInfo');
-  const totalQtyEl  = document.getElementById('totalQty');
-  const totalPriceEl= document.getElementById('totalPrice');
+  const totalQty     = cart.reduce((sum, i) => sum + i.qty, 0);  // Tổng số lượng
+  let total          = cart.reduce((sum, i) => sum + i.qty * i.price, 0); // Tổng trước voucher
+  const voucherInfo  = document.getElementById('voucherInfo');  // Element hiển thị voucher
+  const totalQtyEl   = document.getElementById('totalQty');     // Element hiển thị tổng qty
+  const totalPriceEl = document.getElementById('totalPrice');   // Element hiển thị tổng tiền
 
-  if (selectedVoucher) {
-    total *= (1 - selectedVoucher.discount);                     // Giảm giá nếu có
-    voucherInfo.textContent = `Voucher: ${selectedVoucher.code} (-${(selectedVoucher.discount*100).toFixed(0)}%)`;
-    voucherInfo.classList.remove('hidden');                      // Hiện phần thông tin mã
+  if (selectedVoucher) {                                        // Nếu có voucher
+    total *= (1 - selectedVoucher.discount);                    // Áp dụng giảm giá
+    voucherInfo.textContent =                                  // Cập nhật text voucher
+      `Voucher: ${selectedVoucher.code} (-${(selectedVoucher.discount*100).toFixed(0)}%)`;
+    voucherInfo.classList.remove('hidden');                     // Hiện thông tin voucher
   }
 
-  totalQtyEl.textContent   = totalQty;                           // Cập nhật số lượng
-  totalPriceEl.textContent = total.toFixed(2);                   // Cập nhật giá
+  totalQtyEl.textContent   = totalQty;                          // Hiển thị tổng qty
+  totalPriceEl.textContent = total.toFixed(2);                  // Hiển thị tổng tiền (2 chữ số)
 }
 
-function renderVouchers() {                                      // Hiện danh sách mã trong modal
-  const voucherListEl = document.getElementById('voucherList');
-  voucherListEl.innerHTML = '';
-  vouchers.forEach((v, idx) => {
+// Vẽ danh sách voucher trong modal
+function renderVouchers() {
+  const voucherListEl = document.getElementById('voucherList'); // Container chứa radio list voucher
+  voucherListEl.innerHTML = '';                                 // Xóa nội dung cũ
+
+  vouchers.forEach((v, idx) => {                                // Với mỗi voucher
     const div = document.createElement('div');
     div.className = 'voucher-item';
     div.innerHTML = `
       <input type="radio" name="voucher" id="vc${idx}" value="${idx}">
       <label for="vc${idx}">${v.code} - ${(v.discount*100).toFixed(0)}% off</label>
     `;
-    voucherListEl.appendChild(div);
+    voucherListEl.appendChild(div);                            // Thêm vào container
   });
 }
 
