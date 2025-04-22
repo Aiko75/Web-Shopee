@@ -59,7 +59,7 @@ function applyAllFilters() {
 
   // Lọc theo category (nếu có chọn)
   if (categories.length > 0) {
-    filtered = filtered.filter(product => categories.includes(product.category));
+    filtered = filtered.filter(product => categories.includes(product.category.replace("jewelery", "jewelry")));
   }
 
   // Lọc theo khoảng giá
