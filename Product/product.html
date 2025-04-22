@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fakestoreapi.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline';">
     <title>Product Details</title>
     <link href="product.css" rel="stylesheet">
+    <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
     <script src="product.js" defer></script>
 </head>
 <body>
     <div class="navbar">
-        <img id="logo" src="../Resources/logoplacebo.png" alt="Logo">
+        <img id="logo" src="../Resources/logo.png" alt="Logo">
         <div class="midnav">
             <span id="menu">☰&#8239;Menu
                 <div class="menudrop">
@@ -20,13 +20,20 @@
                     <a href="#">Option 4</a>
                 </div>
             </span>
-            <input id="thebar" type="text" placeholder="Click here to search">
-            <a href="cart.html" id="cartlink"> <img id="cart" src="../Resources/cart.png" alt="Cart"> </a>
-            <a href="log_in.html" id="loginlink"> <img id="login" src="../Resources/user.png" alt="Login"> </a>
+            <form id="searchform">
+                <input id="thebar" type="text" placeholder="Search...">
+                <button>
+                    <a href="#">
+                        <img id="search" src="../Resources/search.png" alt="Search">
+                    </a>
+                </button>
+                <div id="suggestionBox" class="suggestions"></div>
+            </form>
+            <a href="#" id="cartlink"> <img id="cart" src="../Resources/cart.png" alt="Cart"> </a>
+            <a href="#" id="loginlink"> <img id="login" src="../Resources/user.png" alt="Login"> </a>
         </div>
     </div>
     
     <div id="product-details" class="product-detail"></div>
 </body>
-<script src="product.js" defer></script>
 </html>
