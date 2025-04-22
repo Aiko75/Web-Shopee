@@ -8,6 +8,28 @@ fetch("https://fakestoreapi.com/products")
     applyAllFilters(); // Hiển thị ban đầu
   });
 
+// ========================== SEARCHBAR FUNCTION ==========================
+  function handleSearch(event) {
+    event.preventDefault(); // ✅ chặn form reload
+
+    const keyword = document.getElementById("searchInput").value.trim();
+    if (keyword) {
+      window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
+    }
+    return false;
+  }
+
+  //Automatically typed search result insearch bar
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const keyword = urlParams.get("keyword") || "";
+  
+    const input = document.getElementById("searchInput");
+    if (input) {
+      input.value = keyword;
+    }
+  });
+
 // ========================== SORT HANDLER ==========================
 function handleSortChange(value) {
   currentSort = value;
@@ -54,6 +76,8 @@ function getPriceRange() {
 function applyAllFilters() {
   const { min, max } = getPriceRange();
   const categories = getSelectedCategories();
+  const urlParams = new URLSearchParams(window.location.search);
+  const keyword = urlParams.get("keyword")?.toLowerCase() || "";
 
   let filtered = allProducts;
 
@@ -64,6 +88,13 @@ function applyAllFilters() {
 
   // Lọc theo khoảng giá
   filtered = filtered.filter(product => product.price >= min && product.price <= max);
+  
+  // Sắp xếp theo kí tự
+  if (keyword) {
+    filtered = filtered.filter(product =>
+      product.title.toLowerCase().includes(keyword)
+    );
+  }
 
   // Sắp xếp cuối cùng
   const sorted = sortList(filtered, currentSort);

@@ -23,11 +23,11 @@
         <li><a href="home.html"> <img id="logo" src="../Resources/logo placeholder.png"> </a></li>
 
         <li id="searchbar">
-            <form id="searchform">
-            <input type="text" placeholder="Search...">
-            <button type="submit"><img id="searchIMG" src="../Resources/search.png"></button>
-            </form>
-        </li>
+          <form id="searchform" onsubmit="return handleSearch(event)">
+            <input type="text" id="searchInput" placeholder="Search..." />
+            <button type="submit" onclick="handleSearch()"><img id="searchIMG" src="../Resources/search.png"></button>
+          </form>
+      </li>
 
         <li><a href="#"> <img id="cartIMG" src="../Resources/cart.png"> </a></li>
 
