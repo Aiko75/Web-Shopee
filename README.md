@@ -1,4 +1,8 @@
 # Web-Shopee
+
+! Cập nhật tình hình: thiếu giao diện navbar và footer, chưa css cart(đợi navbar và footer r làm)
+=> Sau khi có navbar và footer thì mọi người update lại các trang mình quản lí nhé!
+
 BT nhóm đây nhé
 
 Web bán hàng (Shopee trá hình)
