@@ -1,194 +1,476 @@
 document.addEventListener("click", function (e) {
-  const menu = document.getElementById("menu");                         //   Lấy phần tử menu theo id="menu"
-  const dropdown = document.querySelector(".menudrop");                  //   Lấy dropdown menu theo class="menudrop"
-  if (!menu.contains(e.target)) {                                        //   Nếu điểm click không nằm trong menu
-    dropdown.style.display = "none";                                     //     Ẩn dropdown menu
+  const menu = document.getElementById("menu");
+  const dropdown = document.querySelector(".menudrop");
+
+  if (!menu.contains(e.target)) {
+      dropdown.style.display = "none";
   }
 });
 
-document.getElementById("product-details").innerHTML = "<p>Loading...</p>"; // Hiển thị ngay dòng “Loading...” chờ dữ liệu về
+document.getElementById("logo").addEventListener("click", (event) => {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  window.location.href = "../Home/home.html";
+});
 
-const selectedProductId = localStorage.getItem("selectedProductId");       // Lấy ID sản phẩm đã chọn từ localStorage
-const comments = JSON.parse(localStorage.getItem("comments") || "[]");     // Lấy mảng bình luận (nếu chưa có thì về [])
-let displayedCommentsCount = 3;                                            // Số bình luận sẽ hiển thị ban đầu
+document.getElementById("search").addEventListener("click", (event) => {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  window.location.href = "../Search/search.html";
+});
 
-const CART_KEY = 'cart';                                                   // Khóa dùng để lưu giỏ hàng
-function saveCart(arr) {
-  localStorage.setItem(CART_KEY, JSON.stringify(arr));                     // Chuyển mảng giỏ hàng thành string rồi lưu
+
+document.getElementById("cart").addEventListener("click", (event) => {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  window.location.href = "../Cart/cart.html";
+});
+
+document.getElementById("login").addEventListener("click", (event) => {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  window.location.href = "../Person/log_in.html";
+});
+
+const searchInput = document.querySelector('#searchform input');
+const suggestionBox = document.getElementById('suggestionBox');
+let products = [];
+
+// Fetch dữ liệu từ Fake Store API một lần khi load
+fetch('https://fakestoreapi.com/products')
+  .then(res => res.json())
+  .then(data => {
+    products = data;
+  });
+
+// Xử lý sự kiện khi nhập ký tự
+searchInput.addEventListener('input', () => {
+  const value = searchInput.value.trim().toLowerCase();
+  suggestionBox.innerHTML = '';
+
+  if (!value) {
+    suggestionBox.style.display = 'none';
+    return;
+  }
+
+  let filtered = [];
+
+  if (value.length === 1) {
+    // Ưu tiên: ký tự đầu từ → ký tự nằm bên trong
+    const startsWithChar = products.filter(p =>
+      p.title.toLowerCase().startsWith(value)
+    );
+    const containsChar = products.filter(p =>
+      !p.title.toLowerCase().startsWith(value) &&
+      p.title.toLowerCase().includes(value)
+    );
+    filtered = [...startsWithChar, ...containsChar];
+  } else {
+    // Ưu tiên: chuỗi ở đầu → chuỗi nằm giữa
+    const startsWithStr = products.filter(p =>
+      p.title.toLowerCase().startsWith(value)
+    );
+    const containsStr = products.filter(p =>
+      !p.title.toLowerCase().startsWith(value) &&
+      p.title.toLowerCase().includes(value)
+    );
+    filtered = [...startsWithStr, ...containsStr];
+  }
+
+  // Giới hạn số lượng gợi ý hiển thị
+  filtered = filtered.slice(0, 5);
+
+  if (filtered.length === 0) {
+    suggestionBox.style.display = 'none';
+    return;
+  }
+
+  filtered.forEach(product => {
+    const div = document.createElement('div');
+    div.classList.add('suggestion-item');
+    div.innerHTML = `
+      <img id="suggest-img-${product.id}" src="${product.image}" alt="${product.title}">
+      <div class="suggestion-details">
+          <strong id="suggest-title-${product.id}">${product.title}</strong>
+          <span id="suggest-category-${product.id}">${product.category}</span>
+          <span id="suggest-price-${product.id}" style="color: green; font-weight: bold;">$${product.price}</span>
+          <span id="suggest-rating-${product.id}">${product.rating.rate} ⭐</span>
+      </div>
+    `;
+    div.addEventListener('click', () => {
+      localStorage.setItem("selectedProductId", product.id);
+      window.location.href = "../Product/product.html";
+    });
+    suggestionBox.appendChild(div);
+  });
+
+  suggestionBox.style.display = 'block';
+});
+
+// Ẩn gợi ý khi click ngoài
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('searchform').contains(e.target)) {
+    suggestionBox.style.display = 'none';
+  }
+});
+
+document.getElementById("product-details").innerHTML = "<p>Loading...</p>";
+
+// Lấy ID sản phẩm đã chọn từ localStorage
+const selectedProductId = localStorage.getItem("selectedProductId");
+
+const comments = [
+  { commentId: 1, productId: "1", author: "Nam", star: "4.5", text: "Good product!" },
+  { commentId: 2, productId: "1", author: "Linh", star: "3.0", text: "Good price, good quality" },
+  { commentId: 3, productId: "1", author: "Huy", star: "2.5", text: "Hope to buy this again!" }
+];
+
+let displayedCommentsCount = 3; // Số lượng bình luận hiển thị ban đầu
+
+function renderComments() {
+  const commentList = document.getElementById("comments-list-all");
+  const showMoreButton = document.getElementById("show-more-comments");
+  const showLessButton = document.getElementById("show-less-comments");
+  commentList.innerHTML = "";
+
+  if (comments.length === 0) {
+      commentList.innerHTML = "<li>There is no comment.</li>";
+      showMoreButton.style.display = "none"; // Ẩn nút nếu không có bình luận
+      showLessButton.style.display = "none"; // Ẩn nút nếu không có bình luận
+      return;
+  }
+
+  const commentsToDisplay = comments.slice(0, displayedCommentsCount); // Lấy 3 bình luận đầu tiên hoặc số lượng đã hiển thị
+
+  commentsToDisplay.forEach(c => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+          <img src="https://pbs.twimg.com/media/FkbajedXgAE1BuG?format=jpg&name=4096x4096" alt="User" class="user-image"/>
+          <strong class="user-name">${c.author}</strong><br/>
+          <span>Rates: ${c.star} ⭐</span><br/>
+          <strong>Comment</strong>: ${c.text}
+          `;
+      commentList.appendChild(li);
+  });
+  if (comments.length > displayedCommentsCount) {
+      showMoreButton.style.display = "block"; // Hiển thị nút nếu có nhiều bình luận hơn
+  } else {
+      showMoreButton.style.display = "none"; // Ẩn nút nếu không còn bình luận để xem thêm
+  }
+   // Hiển thị nút "Ẩn bớt" nếu đã hiển thị nhiều hơn 3 bình luận
+  if (displayedCommentsCount > 3) {
+      showLessButton.style.display = "block";
+  } else {
+      showLessButton.style.display = "none";
+  }
 }
 
-let currentProduct = null;                                                 // Biến toàn cục lưu thông tin sản phẩm hiện tại
+// Load saved comments from localStorage if any
+const savedComments = localStorage.getItem("comments");
+if (savedComments) {
+  const parsedComments = JSON.parse(savedComments);
+  if (Array.isArray(parsedComments)) {
+      // Replace the in-memory comments array with saved ones
+      while(comments.length > 0) {
+          comments.pop();
+      }
+      parsedComments.forEach(c => comments.push(c));
+  }
+}
 
-// Nếu đã có ID sản phẩm thì gọi API lấy chi tiết
+const CART_KEY = 'cart';                                             // Khóa lưu giỏ hàng trong localStorage
+function saveCart(arr) {
+ localStorage.setItem(CART_KEY, JSON.stringify(arr)); 
+}
+
+let currentProduct = null;
+
+let relatedProductsFetched = false; // Thêm lại flag để chắc chắn chỉ fetch related 1 lần
+
+// Fetch sản phẩm từ API dựa theo ID (CHỈ GỌI MỘT LẦN)
 if (selectedProductId) {
-  fetch(`https://fakestoreapi.com/products/${selectedProductId}`)          // Gọi Fake Store API
-    .then(res => res.json())                                               // Chuyển response thành JSON
-    .then(product => {
-      currentProduct = product;                                            // Lưu về biến toàn cục
-      displayProductDetails(product);                                      // Gọi hàm hiển thị chi tiết
-      fetchRelatedProducts(product.category);                              // Gọi hàm lấy sản phẩm cùng loại
-    })
-    .catch(() => {
-      document.getElementById("product-details").innerHTML =
-        '<p class="error">Error detail</p>';                               // Hiển thị lỗi nếu fail
-    });
+  fetch(`https://fakestoreapi.com/products/${selectedProductId}`)
+      .then(res => res.json())
+      .then(product => {
+          console.log("Product loaded:", product.id, typeof product.id);
+          currentProduct = product;
+          displayProductDetails(product); // Hiển thị thông tin sản phẩm
+          if (!relatedProductsFetched) {
+              fetchRelatedProducts(product.category); // Tải sản phẩm liên quan
+              relatedProductsFetched = true;
+          }
+      })
+      .catch(error => {
+          console.error('Error fetching product:', error);
+          document.getElementById("product-details").innerHTML =
+              `<p class="error">Product not found!</p>`;
+      });
 } else {
   document.getElementById("product-details").innerHTML =
-    '<p class="error">product not found!</p>';                             // Nếu không tìm thấy ID
+      '<p class="error">Không tìm thấy sản phẩm</p>';
 }
 
-// Hàm dựng UI chi tiết sản phẩm kèm phần bình luận và related products
+// Tạo hàm để hiển thị chi tiết sản phẩm
 function displayProductDetails(product) {
-  const pd = document.getElementById("product-details");                  // Container chính
-  pd.innerHTML = `                                                        // Chèn thẳng HTML
-    <div class="product-container">
-      <img src="${product.image}" alt="${product.title}" class="product-image"/>
-      <div class="product-info">
-        <h2>${product.title}</h2>
-        <p class="price">$${product.price.toFixed(2)}</p>
-        <p class="category">Category: ${product.category}</p>
-        <p class="description">Description: ${product.description}</p>
-        <label>Number of items:
-          <input type="number" min="1" value="1" class="quantity-input" id="quantity-${product.id}"/>
-        </label>
-        <p class="stock">In stock: ${product.rating.count}</p>
-        <p class="rating">Rating: ${product.rating.rate} ⭐ (${product.rating.count} reviews)</p>
-        <div class="button-container">
-          <button onclick="addToCart(${product.id})">Add to cart</button>
-          <button onclick="buyNow(${product.id})">Buy now</button>
-        </div>
+  const productDetails = document.getElementById("product-details");
+  productDetails.innerHTML = `
+      <div class="product-container">
+          <img src="${product.image}" alt="${product.title}" class="product-image"/>
+          <div class="product-info">
+              <h2>${product.title}</h2>
+              <p class="price">$${product.price.toFixed(2)}</p>
+              <p class="category">Category: ${product.category}</p>
+              <p class="description">Description: ${product.description}</p>
+              Number of items:
+              <input type="number" min="1" value="1" class="quantity-input" id="quantity-${product.id}"/>
+              <p class="stock">In stock: ${product.stock || Math.floor(Math.random() * 50 + 1)}</p>
+              <p class="rating">Rating: ${product.rating.rate} ⭐ (${product.rating.count} reviews)</p>
+              <div class="button-container">
+                  <button onclick="addToCart(${product.id})">Add to cart</button>
+                  <button onclick="buyNow(${product.id})">Buy now</button>
+              </div>
+          </div>
       </div>
-    </div>
-    <div class="comments-container">
+
+  <div class="comments-container">
       <h1>Comments</h1>
+      <h3 class="rating">Rating: ${product.rating.rate} ⭐ (${product.rating.count} reviews)</h3>
+      <form onsubmit="addComment(event, ${product.id})" class="comment-form">
+          <div class="form-row">
+              <label for="comment-author-${product.id}">Name:</label>
+              <input
+              type="text"
+              id="comment-author-${product.id}"
+              class="comment-name"
+              placeholder="Your name"
+              required
+              />
+          </div>
+
+          <div class="form-row">
+              <label for="rating-${product.id}">Rates:</label>
+              <input
+              type="number"
+              id="rating-${product.id}"
+              class="rating-input"
+              min="1"
+              max="5"
+              value="1"
+              step="0.1"
+              required
+              />
+          </div>
+
+          <div class="form-row">
+              <label for="comment-text-${product.id}">Comment:</label>
+              <input
+              type="text"
+              id="comment-text-${product.id}"
+              class="comment-text"
+              placeholder="Write comment..."
+              required
+              />
+          </div>
+
+          <div class="form-row">
+              <button type="submit" class="comment-submit">Send</button>
+          </div>
+      </form>
       <ul class="comments-list" id="comments-list-all"></ul>
       <button id="show-more-comments" class="show-more-button">Show more comments</button>
       <button id="show-less-comments" class="show-less-button">Show less comments</button>
-      <form onsubmit="addComment(event, ${product.id})" class="comment-form">
-        <input type="text" id="comment-author-${product.id}" placeholder="Your name" required />
-        <input type="number" min="1" max="5" step="0.1" id="rating-${product.id}" value="1" required/>
-        <input type="text" id="comment-text-${product.id}" placeholder="Write comment..." required />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-    <div class="related-products">
+  </div>
+
+  <div class="related-products">
       <h1>Related Products</h1>
-      <div id="related-products-list" class="related-products-list"></div>
-      <button id="load-more-related" class="show-more-button">See more</button>
-    </div>
-  `;                                                                      // End innerHTML
+      <div class="related-products-list" id="related-products-list"></div>
+  </div>
+  `;
+   // ✅ Chạy sau khi HTML đã render xong
+  renderComments();
 
-  renderComments();                                                        // Hiển thị comment lần đầu
-  document.getElementById("show-more-comments")
-    .addEventListener('click', () => {                                     // Nút “Show more comments”
-      displayedCommentsCount += 3;                                         // Tăng thêm 3 bình luận
-      renderComments();                                                    // Render lại
-    });
-  document.getElementById("show-less-comments")
-    .addEventListener('click', () => {                                     // Nút “Show less comments”
-      displayedCommentsCount = 3;                                          // Reset về 3
-      renderComments();                                                    // Render lại
-    });
-}
-
-// Hàm render (vẽ) danh sách bình luận ra giao diện
-function renderComments() {
-  const list = document.getElementById("comments-list-all");              // <ul> chứa bình luận
-  list.innerHTML = "";                                                     // Xóa nội dung cũ
-  if (!comments.length) {                                                  // Nếu chưa có bình luận nào
-    list.innerHTML = "<li>There is no comment.</li>";                     // Thông báo không có
-    return;
+   // ✅ Thêm trình lắng nghe sự kiện cho nút "Thêm bình luận"
+  const showMoreButton = document.getElementById("show-more-comments");
+  if (showMoreButton) {
+      showMoreButton.addEventListener('click', function() {
+          console.log("Show more comments button clicked");
+          displayedCommentsCount += 3; // Tăng số lượng bình luận hiển thị thêm 3
+          renderComments(); // Gọi lại hàm render để hiển thị thêm bình luận
+      });
   }
-  comments.slice(0, displayedCommentsCount).forEach(c => {                 // Lấy số comment cần hiển thị
-    const li = document.createElement("li");                               // Tạo <li>
-    li.innerHTML = `<strong>${c.author}</strong> (${c.star} ⭐): ${c.text}`;// Điền nội dung
-    list.appendChild(li);                                                  // Thêm vào ul
-  });
+
+   // ✅ Thêm trình lắng nghe sự kiện cho nút "Ẩn bớt"
+  const showLessButton = document.getElementById("show-less-comments");
+  if (showLessButton) {
+      showLessButton.addEventListener('click', function() {
+          console.log("Show less comments button clicked");
+          displayedCommentsCount = 3; // Đặt lại số lượng bình luận hiển thị về 3
+          renderComments();
+      });
+  }
+  console.log("Product ID:", product.id, "Type:", typeof product.id);
 }
 
-// Thêm bình luận mới vào mảng và localStorage
-function addComment(e, pid) {
-  e.preventDefault();                                                      // Ngăn form reload page
-  const author = document.getElementById(`comment-author-${pid}`).value;    // Lấy tên
-  const text = document.getElementById(`comment-text-${pid}`).value;        // Lấy nội dung
-  const star = parseFloat(document.getElementById(`rating-${pid}`).value)  // Lấy điểm
-                 .toFixed(1);
-  comments.push({                                                          // Thêm object comment
-    commentId: comments.length + 1,
-    productId: pid,
-    author,
-    star,
-    text
-  });
-  localStorage.setItem("comments", JSON.stringify(comments));              // Lưu lại localStorage
-  renderComments();                                                        // Render lại
-  e.target.reset();                                                        // Reset form inputs
-}
+function addComment(event, productId) {
+  event.preventDefault();
+  const authorInput = document.getElementById(`comment-author-${productId}`);
+  const textInput = document.getElementById(`comment-text-${productId}`);
+  const ratingInput = document.getElementById(`rating-${productId}`);
+  const ratingValue = parseFloat(ratingInput.value); // Chuyển giá trị input thành số thực
 
-const RELATED_PRODUCTS_PER_LOAD = 8;                                        // Số item mỗi lần load thêm
-let relatedProductsPage = 1;                                                // Page hiện tại
-let allRelatedProducts = [];                                                // Chứa toàn bộ sản phẩm liên quan
+  let formattedRating = "";
+   if (!isNaN(ratingValue)) {
+  formattedRating = ratingValue.toFixed(1); // Định dạng với một chữ số thập phân
+   } else {
+  formattedRating = "0.0"; // Hoặc một giá trị mặc định khác nếu input không hợp lệ
+   }
 
-// Lấy danh sách sản phẩm cùng loại (category)
-function fetchRelatedProducts(cat) {
-  fetch(`https://fakestoreapi.com/products/category/${cat}`)               // Gọi API theo category
-    .then(r => r.json())                                                    // Chuyển thành JSON
-    .then(arr => {
-      allRelatedProducts = arr;                                             // Lưu mảng kết quả
-      renderPageRelatedProducts();                                          // Hiển thị trang đầu tiên
-    });
-}
-
-// Hiển thị một “page” sản phẩm liên quan
-function renderPageRelatedProducts() {
-  const list = document.getElementById("related-products-list");           // Container
-  list.innerHTML = '';                                                      // Xóa cũ
-  allRelatedProducts
-    .slice(0, relatedProductsPage * RELATED_PRODUCTS_PER_LOAD)              // Lấy đến page hiện tại
-    .forEach(p => {
-      const div = document.createElement("div");                            // Tạo div cho 1 sp
-      div.innerHTML = `<img src="${p.image}" alt=""><p>$${p.price.toFixed(2)}</p>`; // Ảnh + giá
-      list.appendChild(div);                                                // Thêm vào container
-    });
-  const loadBtn = document.getElementById("load-more-related");             // Nút “See more”
-  loadBtn.style.display = allRelatedProducts.length > relatedProductsPage * RELATED_PRODUCTS_PER_LOAD
-    ? 'block' : 'none';                                                     // Ẩn/hiện tùy số item còn lại
-  loadBtn.onclick = () => {                                                 // Bắt sự kiện click nút
-    relatedProductsPage++;                                                  // Tăng page
-    renderPageRelatedProducts();                                            // Render lại
+  // Create a new comment with a generated id based on current array length
+  const newComment = {
+      commentId: comments.length + 1,
+      star: formattedRating,
+      productId: productId,
+      author: authorInput.value,
+      text: textInput.value
   };
+
+  // Add new comment to the array
+  comments.push(newComment);
+
+  // Save updated comments to localStorage
+  localStorage.setItem("comments", JSON.stringify(comments));
+  console.log("New comment added:", newComment);
+
+  // Render updated comment list to show it immediately
+  renderComments();
+
+  // Reset input
+  authorInput.value = "";
+  textInput.value = "";
 }
 
-// Thêm sản phẩm vào giỏ hàng (không chuyển trang)
+const RELATED_PRODUCTS_PER_LOAD = 2;
+let relatedProductsPage = 1;
+let currentProductCategory = "";
+let allRelatedProducts = [];  // sẽ chứa toàn bộ sản phẩm của 1 category
+
+
+function fetchRelatedProducts(category) {
+  currentProductCategory = category;
+  relatedProductsPage = 1;
+  allRelatedProducts = [];
+  const list = document.getElementById("related-products-list");
+  list.innerHTML = "";     // xóa hết cũ
+  // fetch không limit, lấy tất
+  fetch(`https://fakestoreapi.com/products/category/${category}`)
+      .then(res => res.json())
+      .then(products => {
+          allRelatedProducts = products;
+          console.log("Số lượng sản phẩm liên quan:", allRelatedProducts.length); // Thêm dòng này
+          renderPageRelatedProducts();
+          renderLoadMoreButton();
+      })
+    .catch(err => {
+      console.error(err);
+      list.innerHTML = '<p class="error">Cannot load these related-products.</p>';
+    });
+}
+
+
+function renderPageRelatedProducts() {
+  const list = document.getElementById("related-products-list");
+  const start = (relatedProductsPage - 1) * RELATED_PRODUCTS_PER_LOAD;
+  const end = start + RELATED_PRODUCTS_PER_LOAD;
+  // chỉ render items trong slice
+  allRelatedProducts.slice(start, end)
+    .forEach(product => {
+      const div = document.createElement("div");
+      div.classList.add("related-product-item");
+      div.innerHTML = `
+        <img src="${product.image}" alt="${product.title}" class="related-product-image"/>
+        <h3 class="related-product-title">${product.title}</h3>
+        <p class="related-product-category">${product.category}</p>
+        <p class="related-product-price">$${product.price.toFixed(2)}</p>
+      `;
+      list.appendChild(div);
+    });
+}
+
+
+function renderLoadMoreButton() {
+  const list = document.getElementById("related-products-list");
+
+  // Manage "Load More" button
+  if (allRelatedProducts.length > relatedProductsPage * RELATED_PRODUCTS_PER_LOAD) {
+      let btn = document.getElementById("load-more-related");
+      if (!btn) {
+          btn = document.createElement("button");
+          btn.id = "load-more-related";
+          btn.classList.add("show-more-button");
+          btn.textContent = "Show more related products";
+          btn.addEventListener('click', loadMoreRelatedProducts);
+          list.appendChild(btn);
+      } else {
+          btn.style.display = "block";
+      }
+  } else {
+      const btn = document.getElementById("load-more-related");
+      if (btn) btn.style.display = "none";
+  }
+
+  // Manage "Show Less" button
+  if (relatedProductsPage > 1) {
+      let btnLess = document.getElementById("show-less-related");
+      if (!btnLess) {
+          btnLess = document.createElement("button");
+          btnLess.id = "show-less-related";
+          btnLess.classList.add("show-less-button");
+          btnLess.textContent = "Show less related products";
+          btnLess.addEventListener('click', showLessRelatedProducts);
+          list.appendChild(btnLess);
+      } else {
+          btnLess.style.display = "block";
+      }
+  } else {
+      const btnLess = document.getElementById("show-less-related");
+      if (btnLess) btnLess.style.display = "none";
+  }
+}
+
+function loadMoreRelatedProducts() {
+  relatedProductsPage++;
+  renderPageRelatedProducts();
+  renderLoadMoreButton();
+}
+
+  // New: Function to show less related products
+  function showLessRelatedProducts() {
+      relatedProductsPage = 1;
+      const list = document.getElementById("related-products-list");
+      list.innerHTML = ""; // Clear related products container
+      renderPageRelatedProducts();
+      renderLoadMoreButton();
+  }
+
+// Thêm sản phẩm vào giỏ hàng
 function addToCart(productId) {
-  const qty = parseInt(document.getElementById(`quantity-${productId}`).value, 10) || 1;
-                                                                           // Lấy số lượng (mặc định 1)
-  let cartArr = JSON.parse(localStorage.getItem(CART_KEY)) || [];          // Lấy mảng giỏ hàng
-  const idx = cartArr.findIndex(i => i.id === productId);                  // Tìm sp đã có sẵn
-  if (idx > -1) cartArr[idx].qty += qty;                                   // Nếu có rồi thì cộng qty
-  else cartArr.push({                                                       // Nếu chưa có thì thêm mới
-    id: productId,
-    title: currentProduct.title,
-    price: currentProduct.price,
-    qty
-  });
-  saveCart(cartArr);                                                        // Gọi hàm lưu giỏ hàng
-  alert(`✅ Added ${currentProduct.title} (Quantity: ${qty}) to cart.`);    // Thông báo cho user
+const qty = parseInt(document.getElementById(`quantity-${productId}`).value, 10) || 1; // Lấy số lượng
+let cartArr = JSON.parse(localStorage.getItem(CART_KEY)) || [];                        // Lấy giỏ hàng cũ
+const idx = cartArr.findIndex(i => i.id === productId);
+if (idx > -1) cartArr[idx].qty += qty;                                                 // Nếu có rồi thì cộng số lượng
+else cartArr.push({ id: productId, title: currentProduct.title, price: currentProduct.price, qty }); // Thêm mới
+saveCart(cartArr);                                                                     // Lưu giỏ hàng
+alert(`Added ${currentProduct.title} (số lượng: ${qty}) to cart.`);                 // Thông báo 
 }
 
-// Chức năng “Buy Now”: lưu vào giỏ rồi chuyển thẳng sang cart.html
+// Mua ngay: chỉ mua 1 sản phẩm, chuyển tới trang giỏ
 function buyNow(productId) {
-  const qty = parseInt(document.getElementById(`quantity-${productId}`).value, 10) || 1;
-  let cartArr = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  const idx = cartArr.findIndex(i => i.id === productId);
-  if (idx > -1) cartArr[idx].qty += qty;
-  else cartArr.push({
-    id: productId,
-    title: currentProduct.title,
-    price: currentProduct.price,
-    qty
-  });
-  saveCart(cartArr);                                                        // Lưu giỏ
-  window.location.href = 'cart.html';                                       // Điều hướng sang trang giỏ hàng
+const qty = parseInt(document.getElementById(`quantity-${productId}`).value, 10) || 1;
+let cartArr = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+const idx = cartArr.findIndex(i => i.id === productId);
+if (idx > -1) cartArr[idx].qty += qty;
+else cartArr.push({
+  id: productId,
+  title: currentProduct.title,
+  price: currentProduct.price,
+  qty
+});
+saveCart(cartArr);                                                        // Lưu giỏ
+window.location.href = '../Cart/cart.html';   
 }
-  
