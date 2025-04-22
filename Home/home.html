@@ -8,72 +8,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootleg</title>
     
-    <link href="homenav.css" rel="stylesheet">
-    <link href="homebody.css" rel="stylesheet">
+    <link href="home.css" rel="stylesheet">
     <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
-
     <script src="home.js" defer></script>
 </head>
 
 
 
 <body>
-    <ul class="navbar">
-        <li><a href="home.html"> <img id="logo" src="../Resources/logo.png"> </a></li>
-
-        <li id="searchbar">
+    <nav class="navbar">
+        <ul>
+          <li>
+            <a href="home.html">
+              <img src="../Resources/logo.png" alt="Logo" height="30">
+            </a>
+          </li>
+          <li>
             <form id="searchform">
-            <input type="text" placeholder="Search...">
-            <button type="submit"><img id="searchIMG" src="../Resources/search.png"></button>
+              <input type="text" placeholder="Search...">
+              <button type="submit" id="searchbtn">
+                <img src="../Resources/search.png" alt="Search" width="16">
+              </button>
+              <div id="suggestionBox" class="suggestions"></div>
             </form>
-        </li>
-
-        <li><a href="#"> <img id="cartIMG" src="../Resources/cart.png"> </a></li>
-
-        <li><a href="#"> <img id="menuIMG" src="../Resources/menu.png"> </a>
-            <ul class="navdrop">
-                <li><br></li>
-                    <li><a href="#"> Option 1 </a></li>
-                    <li><a href="#"> Option 2 </a></li>
-                    <li><a href="#"> Option 3 </a></li>
-                <li><br></li>
-            </ul>
-        </li>
-        
-        <li><a href="#"> <img id="loginIMG" src="../Resources/user.png"> </a></li>
-    </ul>
-
-    <p id="testthing" style="color: black;">
-        sadwidjaidjajdiojaodjaj<br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br>
-    </p>
-
-    <footer class="mainfoot">
-        <div>
-            <img id="footerlogo" src="../Resources/logo.png">
-            <ul class="footertext">
-                <li>CONTACT US</li>
-                <br>
-                <ul class="footertextmini">
-                    <li><a href="#"> <img id="fb" src="../Resources/facebook logo.png"> </a></li>
-                    <li><a href="#"> <img id="x" src="../Resources/twitter logo.png"> </a></li>
-                    <li><a href="#"> <img id="insta" src="../Resources/instagram logo.png"> </a></li>
-                </ul>
-            </ul>
-        </div>
-    </footer>
+          </li>
+          <li>
+            <a href="../Cart/cart.html">
+              <img src="../Resources/cart.png" alt="Cart" width="35">
+            </a>
+          </li>
+          <li>
+            <button id="menuBtn">
+              <img src="../Resources/menu.png" alt="Menu" width="32">
+            </button>
+          </li>
+          <li>
+            <a href="../Person/log_in.html">
+              <img src="../Resources/user.png" alt="User" width="35">
+            </a>
+          </li>
+        </ul>
+      </nav>
+    
+      <main>
+        <div id="product-list" class="product-list"></div>
+      </main>
+    
+      <footer>
+        <img class="footer-logo" src="../Resources/logo.png" alt="Logo">
+        <ul class="footer-contact">
+          <li>CONTACT US</li>
+        </ul>
+      </footer>
 </body>
 
     
 
 </html>
-
