@@ -2,20 +2,20 @@
     position: fixed;
     top: 0;
     left: 0;
+    margin-top: 0;
     width: 100%;
     z-index: 9999;
     background: linear-gradient(#FF4D03, #F37103);
     list-style: none;
-    height: 6vh;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 60px 0 20px;
     overflow: hidden;
-    padding-right: 60px;
+    box-sizing: border-box;
 }
 .navbar li {
-    display: inline-block;
     position: relative;
 }
 .navbar li a {
@@ -37,10 +37,9 @@
     background: transparent;
     position: fixed;
     z-index: 999;
-    top: 6vh;
+    top: 60px;
     left: 79.42%;
     padding: 0;
-        /*animation*/
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -52,14 +51,14 @@
 .navbar li ul a:hover {
     background: #171a1e;
     transition: background-color 0.2s ease;
-    position: relative; /* Ensure positioning for ::after */
+    position: relative;
 }
 .navbar li ul a:hover::after {
     content: '';
     position: absolute;
     top: 14.5%;
     left: 6px;
-    width: 2px; /* Adjust width for the vertical line */
+    width: 2px;
     height: 70%;
     text-align: center;
     background: white;
@@ -116,31 +115,18 @@
 
 
 #logo {
-    height: 30px;
+    height: 40px;
     user-select: none;
+margin: 0 8px;
 }
 #searchIMG{
     width: 16px;
     height: 16px;
 }
-#cartIMG {
+#cartIMG, #menuIMG, #loginIMG {
     width: 35px;
     height: 35px;
     cursor: pointer;
     max-height: 100%;
-    margin:17px;
-}
-#menuIMG {
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    max-height: 100%;
-    margin: 17px;
-}
-#loginIMG {
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    max-height: 100%;
-    margin: 17px;;   
+    margin: 0 8px;
 }

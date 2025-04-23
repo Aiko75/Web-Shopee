@@ -7,10 +7,10 @@ document.addEventListener( "DOMContentLoaded", () =>{
 
             products.forEach( product =>{
                 const pCard = document.createElement("div");
-                pCard.className = "product-card uniform-size";
+                pCard.className = "product-card";
 
                 pCard.innerHTML =
-                    `<img src="${ product.image }" alt="${ product.title }" class="product-image uniform-image">
+                    `<img src="${ product.image }" alt="${ product.title }" class="product-image prodIMG">
                         <div class="product-info">
                             <h2>${ product.title }</h2>
                             <p class="price">$${ product.price.toLocaleString() }</p>
@@ -69,7 +69,6 @@ document.addEventListener( "DOMContentLoaded", () =>{
             div.innerHTML = 
                 `<img src="${item.image}" alt="${item.title}" class="product-image">
                 <div class="product-info">
-                    <h2>${item.title}</h2>
                     <p class="price">$${item.price.toLocaleString()}</p>
                     <p class="rating">${item.rating.rate}⭐ (${item.rating.count} reviews)</p>
                 </div>`;
@@ -81,8 +80,8 @@ document.addEventListener( "DOMContentLoaded", () =>{
             featuredContainer.appendChild(clone);
         }
 
-        let index = 0;
-        const movePercent = 100 / visibleProd;
+        let index = 0;//==========================================================
+        const movePercent = 105 / visibleProd;
 
         setInterval( () =>{
             index++;

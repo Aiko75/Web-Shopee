@@ -1,41 +1,8 @@
-document.addEventListener("click", function (e) {
-  const menu = document.getElementById("menu");
-  const dropdown = document.querySelector(".menudrop");
-
-  if (menu && dropdown && !menu.contains(e.target)) {
-      dropdown.style.display = "none";
-  }
-});
-
 const logo = document.getElementById("logo");
 if (logo) {
   logo.addEventListener("click", (event) => {
     event.preventDefault();
     window.location.href = "../Home/home.html";
-  });
-}
-
-const search = document.getElementById("search");
-if (search) {
-  search.addEventListener("click", (event) => {
-    event.preventDefault();
-    window.location.href = "../Search/search.html";
-  });
-}
-
-const cart = document.getElementById("cart");
-if (cart) {
-  cart.addEventListener("click", (event) => {
-    event.preventDefault();
-    window.location.href = "../Cart/cart.html";
-  });
-}
-
-const login = document.getElementById("login");
-if (login) {
-  login.addEventListener("click", (event) => {
-    event.preventDefault();
-    window.location.href = "../Person/log_in.html";
   });
 }
 
