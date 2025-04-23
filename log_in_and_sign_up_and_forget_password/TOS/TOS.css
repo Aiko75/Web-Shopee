@@ -4,7 +4,7 @@
 
 body {
     font-family: "Noto San", sans-serif;
-    background: #c5c4c4;
+    background-image: url("../../Resources/textwebBG.png");
     margin: 0;
     padding: 0;
     display: flex;
@@ -20,5 +20,7 @@ h1 {
     width: 80vw;
     background: #fff;   
     padding: 30px 90px;
+    margin: 20px;
+    border-radius: 20px;
     box-sizing: border-box;
 }

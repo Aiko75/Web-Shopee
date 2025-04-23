@@ -94,6 +94,11 @@ function renderProducts(list) {
         <button class="buy-btn">Buy</button>
       </div>
     `;
+    const buyBtn = card.querySelector('.buy-btn');
+    buyBtn.addEventListener('click', function() {
+      localStorage.setItem('selectedProductId', item.id);
+      window.location.href = '../Product/product.html';
+    });
     flex.appendChild(card);
   });
 }

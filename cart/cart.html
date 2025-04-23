@@ -3,61 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>Bootleg Cart</title> 
-  <link href="homenav.css" rel="stylesheet"> 
-  <link href="homebody.css" rel="stylesheet"> 
-  <link href="cart.css" rel="stylesheet">  
+  <title>Bootleg Cart</title>
+  <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+
+  <link rel="stylesheet" href="cart.css">
+  <link rel="stylesheet" href="../Shared Page Layout/navbar.css">
+  <link rel="stylesheet" href="../Shared Page Layout/footer.css">
+
+  <script src="../Shared Page Layout/componentLoader.js" defer></script>
 </head>
 <body>
-  
-  <header>
-    <ul class="navbar">
-      <li><a href="home.html"><img id="logo" src="../Resources/logo placeholder.png" alt="Logo"></a></li> 
-      <li id="searchbar">
-        <form id="searchform"><input type="text" placeholder="Search..."><button type="submit"><img id="searchIMG" src="../Resources/search.png" alt="Search"></button></form>
-      </li>
-      <li><a href="#"><img id="cartIMG" src="../Resources/cart.png" alt="Cart"></a></li> 
-      <li><a href="#"><img id="menuIMG" src="../Resources/menu.png" alt="Menu"></a>
-        <ul class="navdrop">
-          <li><a href="#">Option 1</a></li> 
-          <li><a href="#">Option 2</a></li> 
-          <li><a href="#">Option 3</a></li> 
-        </ul>
-      </li>
-      <li><a href="#"><img id="loginIMG" src="../Resources/user.png" alt="User"></a></li>                           
-    </ul>
-  </header>
-
+  <div id="navHolder"></div>
+  <div class="main-content">
   <!-- EMPTY CART -->
-  <section id="emptyCartPage" class="page">                                                                            <!-- Trang khi giỏ rỗng -->
-    <div class="empty-box">
-      <img src="../Resources/Favicon.ico" alt="Empty cart">                                                            <!-- Hình gì đó cho đỡ trống -->
-      <p>Your cart is empty</p>                                                                                        <!-- Thông báo giỏ rỗng -->
-      <button id="buyNowBtn" class="btn buy-now">Buy Now</button>                                                      <!-- Nút Buy Now -->
-    </div>
-  </section>
+    <section id="emptyCartPage" class="page">                                                                            <!-- Trang khi giỏ rỗng -->
+      <div class="empty-box">
+        <img src="../Resources/FaviconBig.png" alt="Empty cart">                                                            <!-- Hình gì đó cho đỡ trống -->
+        <p>Your cart is empty</p>                                                                                        <!-- Thông báo giỏ rỗng -->
+        <button id="buyNowBtn" class="btn buy-now">Buy Now</button>                                                      <!-- Nút Buy Now -->
+      </div>
+    </section>
 
-  <!-- CART DETAIL -->
-  <aside id="cartPage" class="page hidden">                                                                            <!-- Trang chi tiết giỏ -->
-    <h2>Your Cart</h2>                                                                                                 <!-- Tiêu đề giỏ -->
-    <div id="cartItems" class="cart-items"></div>                                                                      <!-- Các mục -->
-    <div class="summary">                                                                                              <!-- Tổng kết -->
-      <button id="openVoucherBtn" class="btn voucher-btn">Select Voucher</button>                                      <!-- Chọn voucher -->
-      <div id="voucherInfo" class="voucher-selected hidden"></div>                                                     <!-- Thông tin voucher -->
-      <p>Total (<span id="totalQty">0</span> items): <strong>$<span id="totalPrice">0.00</span></strong></p>           <!-- Tổng số lượng và giá -->
-      <button id="checkoutBtn" class="btn checkout">Checkout</button>                                                  <!-- Nút thanh toán -->
-    </div>
-  </aside>
+    <!-- CART DETAIL -->
+    <aside id="cartPage" class="page hidden">                                                                            <!-- Trang chi tiết giỏ -->
+      <h2>Your Cart</h2>                                                                                                 <!-- Tiêu đề giỏ -->
+      <div id="cartItems" class="cart-items"></div>                                                                      <!-- Các mục -->
+      <div class="summary">                                                                                              <!-- Tổng kết -->
+        <button id="openVoucherBtn" class="btn voucher-btn">Select Voucher</button>                                      <!-- Chọn voucher -->
+        <div id="voucherInfo" class="voucher-selected hidden"></div>                                                     <!-- Thông tin voucher -->
+        <p>Total (<span id="totalQty">0</span> items): <strong>$<span id="totalPrice">0.00</span></strong></p>           <!-- Tổng số lượng và giá -->
+        <label for="shippingAddress">Shipping Address:</label><br>
+        <textarea id="shippingAddress" class="address-input" placeholder="Enter your shipping address" required></textarea>
+        <button id="checkoutBtn" class="btn checkout">Checkout</button>
+                                                  
+      </div>
+    </aside>
 
-  <!-- VOUCHER MODAL -->
-  <div id="voucherModal" class="modal hidden">                                                                          <!-- Popup chọn voucher -->
-    <div id="modalBackdrop" class="modal-backdrop"></div>                                                               <!-- Nền mờ -->
-    <div class="modal-content">                                                                                         <!-- Nội dung modal -->
-      <header class="modal-header"><h3>Choose Voucher</h3><button id="closeVoucherBtn" class="modal-close">&times;</button></header> <!-- Header modal -->
-      <div class="modal-body"><div id="voucherList" class="voucher-list"></div></div>                                   <!-- Danh sách voucher -->
-      <footer class="modal-footer"><button id="cancelVoucherBtn" class="btn">Back</button><button id="applyVoucherBtn" class="btn checkout">OK</button></footer> <!-- Chân modal -->
+    <!-- VOUCHER MODAL -->
+    <div id="voucherModal" class="modal hidden">                                                                          <!-- Popup chọn voucher -->
+      <div id="modalBackdrop" class="modal-backdrop"></div>                                                               <!-- Nền mờ -->
+      <div class="modal-content">                                                                                         <!-- Nội dung modal -->
+        <header class="modal-header"><h3>Choose Voucher</h3><button id="closeVoucherBtn" class="modal-close">&times;</button></header> <!-- Header modal -->
+        <div class="modal-body"><div id="voucherList" class="voucher-list"></div></div>                                   <!-- Danh sách voucher -->
+        <footer class="modal-footer"><button id="cancelVoucherBtn" class="btn">Back</button><button id="applyVoucherBtn" class="btn checkout">OK</button></footer> <!-- Chân modal -->
+      </div>
     </div>
   </div>
-
+  <div id="footHolder"></div>
   <script src="cart.js" defer></script>
 </html>

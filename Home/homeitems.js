@@ -19,6 +19,12 @@ document.addEventListener( "DOMContentLoaded", () =>{
                         </div>
                     `;
 
+                const buyBtn = pCard.querySelector('.buy-btn');
+                buyBtn.addEventListener('click', function() {
+                    localStorage.setItem('selectedProductId', product.id);
+                    window.location.href = '../Product/product.html';
+                });
+
                 container.appendChild(pCard);
             });
     })
@@ -57,17 +63,19 @@ document.addEventListener( "DOMContentLoaded", () =>{
     function displayProd(items){
         featuredContainer.innerHTML = '';
 
-        // Add original items
         items.forEach( item =>{
             const div = document.createElement("div");
-            div.className = "featured-item";
+            div.className = "product-card";
             div.innerHTML = 
-                `<img src="${item.image}" alt="${item.title}">
-                <p>${item.title}</p>`;
+                `<img src="${item.image}" alt="${item.title}" class="product-image">
+                <div class="product-info">
+                    <h2>${item.title}</h2>
+                    <p class="price">$${item.price.toLocaleString()}</p>
+                    <p class="rating">${item.rating.rate}⭐ (${item.rating.count} reviews)</p>
+                </div>`;
             featuredContainer.appendChild(div);
         });
 
-        // Clone first few for seamless looping
         for( let i = 0; i < visibleProd; i++ ){
             const clone = featuredContainer.children[i].cloneNode(true);
             featuredContainer.appendChild(clone);
@@ -82,7 +90,6 @@ document.addEventListener( "DOMContentLoaded", () =>{
             featuredContainer.style.transform = `translateX(-${index * movePercent}%)`;
 
             if ( index === items.length ){
-                // Seamlessly reset back to start
                 setTimeout( () =>{
                     featuredContainer.style.transition = 'none';
                     featuredContainer.style.transform = 'translateX(0)';

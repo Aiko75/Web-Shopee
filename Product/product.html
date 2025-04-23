@@ -3,29 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fakestoreapi.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline';">
     <title>Product Details</title>
     <link href="product.css" rel="stylesheet">
+    <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+    <link rel="stylesheet" href="../Shared Page Layout/navbar.css">
+    <link rel="stylesheet" href="../Shared Page Layout/footer.css">
     <script src="product.js" defer></script>
+    <script src="../Shared Page Layout/componentLoader.js" defer></script>
 </head>
 <body>
-    <div class="navbar">
-        <img id="logo" src="../Resources/logoplacebo.png" alt="Logo">
-        <div class="midnav">
-            <span id="menu">☰&#8239;Menu
-                <div class="menudrop">
-                    <a href="#">Option 1</a>
-                    <a href="#">Option 2</a>
-                    <a href="#">Option 3</a>
-                    <a href="#">Option 4</a>
-                </div>
-            </span>
-            <input id="thebar" type="text" placeholder="Click here to search">
-            <a href="#" id="cartlink"> <img id="cart" src="../Resources/cart.png" alt="Cart"> </a>
-            <a href="#" id="loginlink"> <img id="login" src="../Resources/user.png" alt="Login"> </a>
-        </div>
-    </div>
+    <div id="navHolder"></div>
     
     <div id="product-details" class="product-detail"></div>
+
+    <div id="footHolder"></div>
 </body>
 </html>

@@ -44,15 +44,103 @@ body {
     cursor: pointer;
 }
 
+#searchform {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Căn chỉnh các phần tử theo chiều dọc */
+}
+
 #thebar {
     width: 700px;
     height: 30px;
+    padding: 5px; /* Thêm padding để chữ không bị sát viền */
     border-radius: 5px;
     border: 1px solid white;
+    font-size: 16px; /* Tăng kích thước chữ gợi ý */
+}
+
+#searchform button { /* Style trực tiếp cho button */
+    background-color: #EE3611;
+    color: white;
+    border: none;
+    padding: 5px 15px; /* Tăng padding để button dễ bấm hơn */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 45px; /* Đảm bảo chiều cao tương đồng với input */
+}
+
+#searchform button:hover {
+    background-color: #CC290B; /* Màu đậm hơn khi hover */
+}
+
+#searchform button a {
+    display: flex; /* Để căn chỉnh ảnh bên trong */
+    align-items: center;
+    text-decoration: none; /* Loại bỏ gạch chân ở link */
+}
+
+#searchform button a img {
+    width: 20px; /* Điều chỉnh kích thước ảnh */
+    height: auto;
 }
 
 input[type="text"]{
     padding-left: 10px;
+}
+
+.suggestions {
+    top: 100%;
+    display: none; /* Ẩn danh sách gợi ý mặc định */
+    position: absolute;
+    background: #fff;
+    width: 500px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.suggestions.active {
+    display: block; /* Hiện danh sách gợi ý khi có kết quả */
+}
+
+.suggestions span {
+    font-size: 14px;
+    color: black;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+.suggestion-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    flex-shrink: 0; /* Không co ảnh lại */
+}
+  
+.suggestion-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+  
+.suggestion-details strong {
+    font-size: 18px;
+    font-weight: 600;
+    color: black;
 }
 
 #cart, #login {
@@ -192,28 +280,51 @@ button:hover {
 }
 
 .comment-form {
-    margin-top: 10px;
+    width: 30%;           /* hoặc max-width: 600px; margin: auto; */
+    padding: 10px;
 }
-.comment-form input {
+
+.comment-form .form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.comment-form .form-row label {
+    width: 100px;          /* độ rộng cố định cho label để thẳng hàng */
+    font-weight: bold;
     margin-right: 10px;
-    padding: 5px;
 }
-.comment-form button {
-    padding: 5px 10px;
+
+.comment-form .form-row input {
+    flex: 1;               /* input chiếm phần còn lại */
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
-.comments-list li {
-    margin-bottom: 8px;
+
+.comment-form .rating-input {
+    /* nếu cần style riêng cho số */
+    max-width: 60px;
 }
+
+.comment-form .form-row button.comment-submit {
+    margin-left: 110px;    /* đẩy ngang cho khớp với input */
+    padding: 8px 16px;
+    background-color: #EE3611;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-form .form-row button.comment-submit:hover {
+    background-color: #f56143;
+}
+
 
 .comments-list{
     list-style-type: none;
-}
-
-.rating-input{
-    margin-top: 10px;
-}
-
-.comments-list{
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -245,11 +356,6 @@ button:hover {
     margin-bottom: -4px;
 }
 
-.show-more-button, .show-less-button {
-    display: block;
-    margin: 10px auto;
-    width: 300px;
-}
 
 .show-more-button:hover, .show-less-button:hover {
     background-color:rgb(255, 111, 0);
@@ -259,7 +365,6 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: left;
-    justify-content: center;
     margin: 120px auto;
     padding: 20px;
     background-color: #f9f9f9;
@@ -276,12 +381,15 @@ button:hover {
 }
 
 .related-products-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Tạo 4 cột */
+    display: flex;
+    flex-wrap: wrap;
     gap: 15px;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .related-product-item {
+    flex: 0 0 calc(50% - 7.5px);
     text-align: center;
 }
 
@@ -293,12 +401,27 @@ button:hover {
     margin-bottom: 5px;
 }
 
+.related-product-category{
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.related-product-title{
+    max-width: 400px;
+    text-align: center;
+    margin-left: 100px;
+    height: 50px;
+}
+
 .related-product-price {
     font-weight: bold;
     color: green;
 }
 
-#load-more-related {
-    grid-column: 1 / -1; /* Nút "Xem thêm" chiếm toàn bộ chiều rộng */
-    margin-top: 20px;
+.show-more-button, .show-less-button {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    width: 200px;
+    margin: 10px auto;
 }
