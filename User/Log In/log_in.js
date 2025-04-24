@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     emailinput.value = savedemail;                                      // gán vào ô email
     remembercheckbox.checked = true;                                    // tự check ô remember
   }
-
+orgetPW
   // hàm kiểm tra email đúng định dạng
   function isvalidemail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;                             // regex kiểm tra định dạng email

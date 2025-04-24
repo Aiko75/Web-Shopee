@@ -106,6 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('formstep3').reset();                  // reset form mật khẩu
     step3.classList.add('hidden');                                 // ẩn bước 3
 
-    window.location.href = '../log_in/log_in.html';                          // chuyển đến trang đăng nhập
+    window.location.href = '../Log In/log_in.html';                          // chuyển đến trang đăng nhập
   });
 });

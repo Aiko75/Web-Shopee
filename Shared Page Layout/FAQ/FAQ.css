@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+
+
+body {
+    font-family: "Noto San", sans-serif;
+    background-image: url("../../Resources/textwebBG.png");
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    height: auto;
+}
+h1 {
+    font-size: large;
+    font-weight: 500;
+    text-align: left;
+}
+.container {
+    width: 80vw;
+    height: 930px;
+    background: #fff;   
+    padding: 60px 120px;
+    margin: 20px;
+    border-radius: 20px;
+    box-sizing: border-box;
+}

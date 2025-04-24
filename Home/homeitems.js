@@ -72,11 +72,21 @@ document.addEventListener( "DOMContentLoaded", () =>{
                     <p class="price">$${item.price.toLocaleString()}</p>
                     <p class="rating">${item.rating.rate}⭐ (${item.rating.count} reviews)</p>
                 </div>`;
+            div.style.cursor = "pointer";
+            div.addEventListener( "click", function(){
+                localStorage.setItem( "selectedProductId", item.id );
+                window.location.href = "../Product/product.html";
+            });
             featuredContainer.appendChild(div);
         });
 
         for( let i = 0; i < visibleProd; i++ ){
             const clone = featuredContainer.children[i].cloneNode(true);
+            clone.style.cursor = "pointer";
+            clone.addEventListener( "click", function(){
+                localStorage.setItem( "selectedProductId", items[i].id );
+                window.location.href = "../Product/product.html";
+            });
             featuredContainer.appendChild(clone);
         }
 

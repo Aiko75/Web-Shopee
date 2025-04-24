@@ -117,15 +117,29 @@
 #logo {
     height: 40px;
     user-select: none;
-margin: 0 8px;
+    margin: 0 8px;
 }
 #searchIMG{
     width: 16px;
     height: 16px;
 }
-#cartIMG, #menuIMG, #loginIMG {
-    width: 35px;
-    height: 35px;
+#cartIMG {
+    width: 39px;
+    height: 39px;
+    cursor: pointer;
+    max-height: 100%;
+    margin: 0 8px;
+}
+#menuIMG {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    max-height: 100%;
+    margin: 0 8px;
+}
+#loginIMG {
+    width: 39px;
+    height: 39px;
     cursor: pointer;
     max-height: 100%;
     margin: 0 8px;

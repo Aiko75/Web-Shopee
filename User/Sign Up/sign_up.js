@@ -67,7 +67,7 @@ submitbutton.addEventListener('click', (e) => {
 
   // nếu mọi thứ hợp lệ thì hiển thị thông báo thành công và chuyển hướng
   alert('registration successful!');
-  window.location.href = "../log_in/log_in.html";                                                 // chuyển sang trang login
+  window.location.href = "../Log In/log_in.html";                                                 // chuyển sang trang login
 });
 
 // sự kiện click icon facebook
