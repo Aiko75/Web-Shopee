@@ -254,6 +254,7 @@ function displayProductDetails(product) {
   <div class="related-products">
       <h1>Related Products</h1>
       <div class="related-products-list" id="related-products-list"></div>
+      <div class="related-products-buttons" id="related-products-buttons"></div>
   </div>
   `;
    // ✅ Chạy sau khi HTML đã render xong
@@ -367,60 +368,49 @@ function renderPageRelatedProducts() {
 }
 
 
-function renderLoadMoreButton() {
-  const list = document.getElementById("related-products-list");
+function renderLoadMoreButton(){
+  const buttonsContainer = document.getElementById( "related-products-buttons" );
+  if ( !buttonsContainer ) return;
+  buttonsContainer.innerHTML = "";
 
-  // Manage "Load More" button
-  if (allRelatedProducts.length > relatedProductsPage * RELATED_PRODUCTS_PER_LOAD) {
-      let btn = document.getElementById("load-more-related");
-      if (!btn) {
+  if ( allRelatedProducts.length > relatedProductsPage * RELATED_PRODUCTS_PER_LOAD ){
+      let btn = document.getElementById( "load-more-related" );
+      if (!btn){
           btn = document.createElement("button");
           btn.id = "load-more-related";
           btn.classList.add("show-more-button");
           btn.textContent = "Show more related products";
           btn.addEventListener('click', loadMoreRelatedProducts);
-          list.appendChild(btn);
-      } else {
-          btn.style.display = "block";
       }
-  } else {
-      const btn = document.getElementById("load-more-related");
-      if (btn) btn.style.display = "none";
+      buttonsContainer.appendChild(btn);
   }
 
-  // Manage "Show Less" button
-  if (relatedProductsPage > 1) {
-      let btnLess = document.getElementById("show-less-related");
-      if (!btnLess) {
+  if ( relatedProductsPage > 1 ){
+      let btnLess = document.getElementById( "show-less-related" );
+      if (!btnLess){
           btnLess = document.createElement("button");
           btnLess.id = "show-less-related";
           btnLess.classList.add("show-less-button");
           btnLess.textContent = "Show less related products";
           btnLess.addEventListener('click', showLessRelatedProducts);
-          list.appendChild(btnLess);
-      } else {
-          btnLess.style.display = "block";
       }
-  } else {
-      const btnLess = document.getElementById("show-less-related");
-      if (btnLess) btnLess.style.display = "none";
+      buttonsContainer.appendChild(btnLess);
   }
 }
 
-function loadMoreRelatedProducts() {
+function loadMoreRelatedProducts(){
   relatedProductsPage++;
   renderPageRelatedProducts();
   renderLoadMoreButton();
 }
 
-  // New: Function to show less related products
-  function showLessRelatedProducts() {
-      relatedProductsPage = 1;
-      const list = document.getElementById("related-products-list");
-      list.innerHTML = "";
-      renderPageRelatedProducts();
-      renderLoadMoreButton();
-  }
+function showLessRelatedProducts(){
+  relatedProductsPage = 1;
+  const list = document.getElementById( "related-products-list" );
+  list.innerHTML = "";
+  renderPageRelatedProducts();
+  renderLoadMoreButton();
+}
 
 // Thêm sản phẩm vào giỏ hàng
 function addToCart(productId) {

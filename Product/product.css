@@ -228,8 +228,8 @@ button:hover {
 }
 
 .related-product-image {
-    width: 250px;
-    height: 300px;
+    width: 210px;
+    height: 230px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 5px;
@@ -258,4 +258,11 @@ button:hover {
     font-size: 20px;
     width: 200px;
     margin: 10px auto;
+}
+
+.related-products-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
 }

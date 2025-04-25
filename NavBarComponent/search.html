@@ -8,42 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootleg</title>
     
-    <link href="homenav.css" rel="stylesheet">
-    <link href="homebody.css" rel="stylesheet">
-    <link href="../Resources/Favicon.ico" rel="icon" type="image/x-icon">
+    <link rel="stylesheet" href="navbarComp.css">
 
-    <script src="home.js" defer></script>
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="../Shared Page Layout/navbar.css">
+    <link rel="stylesheet" href="../Shared Page Layout/footer.css">
+
+    <link rel="icon" href="../Resources/Favicon.ico"type="image/x-icon">
+
+    <script src="../Shared Page Layout/componentLoader.js" defer></script>
 </head>
 
 
 
 <body>
-    <ul class="navbar">
-        <li><a href="home.html"> <img id="logo" src="../Resources/logo placeholder.png"> </a></li>
-
-        <!-- Seachbar thay đổi -->
-        <li id="searchbar">
-            <form id="searchform" onsubmit="return handleSearch(event)">
-              <input type="text" id="searchInput" placeholder="Search..." />
-              <button type="submit" onclick="handleSearch()"><img id="searchIMG" src="../Resources/search.png"></button>
-            </form>
-        </li>
-
-        <li><a href="#"> <img id="cartIMG" src="../Resources/cart.png"> </a></li>
-
-        <li><a href="#"> <img id="menuIMG" src="../Resources/menu.png"> </a>
-            <ul class="navdrop">
-                <li><br></li>
-                    <li><a href="#"> Option 1 </a></li>
-                    <li><a href="#"> Option 2 </a></li>
-                    <li><a href="#"> Option 3 </a></li>
-                <li><br></li>
-            </ul>
-        </li>
-        
-        <li><a href="#"> <img id="loginIMG" src="../Resources/user.png"> </a></li>
-    </ul>
+    <div id="navHolder"></div>
 
       <div class="main-wrapper">
         <div  class="left-container">
@@ -94,6 +72,6 @@
             
         </div>
     </footer>
-    <script src="navbar.js"></script>
+    <script src="navbarComp.js"></script>
 </body>
 </html>
