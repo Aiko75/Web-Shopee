@@ -90,7 +90,7 @@ document.addEventListener( "DOMContentLoaded", () =>{
             featuredContainer.appendChild(clone);
         }
 
-        let index = 0;//==========================================================
+        let index = 0;
         const movePercent = 105 / visibleProd;
 
         setInterval( () =>{

@@ -65,3 +65,45 @@
 .buy-btn:hover {
     background-color: #d8431f;
 }
+
+@media (max-width: 900px) {
+    .product-card {
+        flex: 0 0 calc(50% - 10px);
+        height: 300px;
+    }
+    .product-card img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-flex {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-card {
+        flex: 0 0 100%;
+        width: 95vw;
+        height: 220px;
+        margin-bottom: 10px;
+    }
+    .product-card img {
+        width: 80px;
+        height: 80px;
+        padding: 5px;
+    }
+    .product-info {
+        padding: 0.5rem;
+    }
+    .price {
+        font-size: 15px;
+    }
+    .rating {
+        font-size: 12px;
+    }
+    .buy-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
