@@ -363,6 +363,10 @@ function renderPageRelatedProducts() {
         <p class="related-product-category">${product.category}</p>
         <p class="related-product-price">$${product.price.toFixed(2)}</p>
       `;
+      div.addEventListener( 'click', function(){
+        localStorage.setItem( "selectedProductId", product.id );
+        window.location.href = "../Product/product.html";
+      });
       list.appendChild(div);
     });
 }
