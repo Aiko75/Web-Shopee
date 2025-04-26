@@ -1,6 +1,7 @@
 .product-flex {
     display: flex;
     flex-wrap: wrap;
+    z-index: 10000;
 }
 .product-card {
     position: relative;
